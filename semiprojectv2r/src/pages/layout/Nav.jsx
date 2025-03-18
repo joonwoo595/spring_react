@@ -3,7 +3,8 @@ import React from "react";
 const Nav = () => {
     return (
         <nav role="navigation" className="navbar navbar-light bg-light">
-            <ul className="nav">
+
+            <ul className="nav space-between">
                 <li className="nav-item"><a href="/" className="nav-link">Home</a></li>
                 <li className="nav-item"><a href="/member/join" className="nav-link">회원가입</a></li>
                 <li className="nav-item"><a href="/member/login" className="nav-link">로그인</a></li>
