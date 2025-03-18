@@ -12,6 +12,7 @@ import NotFound from "./pages/NotFound";
 import './styles/App.css';
 import Login from "./pages/Login.jsx";
 import Myinfo from "./pages/Myinfo.jsx";
+import BoardList from "./pages/BoardList";
 
 function App() {
     return (
@@ -22,7 +23,7 @@ function App() {
                 <Route path="/" element={<Main/>}/>
                 <Route path="/member/join" element={<Join/>}/>
                 <Route path="/member/login" element={<Login/>}/>
-                {/*<Route path="/board/list" element={<BoardList/>}/>*/}
+                <Route path="/board/list" element={<BoardList/>}/>
                 {/*<Route path="/gallery/list" element={<GalleryList/>}/>*/}
                 <Route path="/member/myinfo" element={<Myinfo/>}/>
                 <Route path="*" element={<NotFound/>}/>
