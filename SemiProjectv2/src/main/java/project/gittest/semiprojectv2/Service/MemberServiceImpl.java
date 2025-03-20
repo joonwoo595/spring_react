@@ -1,15 +1,14 @@
-
 package project.gittest.semiprojectv2.Service;
 
-
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
+import project.gittest.semiprojectv2.domain.Member;
 import project.gittest.semiprojectv2.domain.MemberDTO;
 import project.gittest.semiprojectv2.repository.MemberRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class MemberServiceImpl implements MemberService {
+public class MemberServiceImpl implements project.gittest.semiprojectv2.Service.MemberService {
 
     private final MemberRepository memberMapper;
 
@@ -30,6 +29,15 @@ public class MemberServiceImpl implements MemberService {
                              // true/false 반환
     }
 
+    @Override
+    public Member loginMember(MemberDTO member) {
+        Member findMember = memberMapper.findByUserid(member.getUserid());
 
+        if (findMember == null || !findMember.getPasswd().equals(member.getPasswd())) {
+            throw new IllegalStateException("아이디나 비밀번호가 일치하지 않습니다!!");
+        }
+
+        return findMember;
+    }
 
 }
