@@ -68,7 +68,7 @@ public class BoardServiceImpl implements BoardService {
 
     @Override
     public Page<BoardDTO> testReadBoard(int cpg) {
-        Pageable pageable = PageRequest.of(cpg, pageSize, Sort.Direction.DESC, "bno");
+        Pageable pageable = PageRequest.of(cpg-1, pageSize, Sort.Direction.DESC, "bno");
 
         Page<BoardDTO> pageboards = boardRepository.findBy(pageable);
 
