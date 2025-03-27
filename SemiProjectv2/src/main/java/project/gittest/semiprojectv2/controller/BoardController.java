@@ -1,19 +1,22 @@
 package project.gittest.semiprojectv2.controller;
 
+import project.gittest.semiprojectv2.domain.Board;
+import project.gittest.semiprojectv2.domain.BoardDTO;
+import project.gittest.semiprojectv2.domain.BoardListDTO;
+import project.gittest.semiprojectv2.repository.BoardRepository;
+import project.gittest.semiprojectv2.Service.BoardService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import project.gittest.semiprojectv2.Service.BoardService;
-import project.gittest.semiprojectv2.domain.Board;
-import project.gittest.semiprojectv2.domain.BoardListDTO;
 
 @CrossOrigin(origins="http://localhost:5173")
 @Slf4j
 @RestController
-@RequiredArgsConstructor
 @RequestMapping("/api/board")
+@RequiredArgsConstructor
 public class BoardController {
 
     private final BoardService boardService;
@@ -25,23 +28,41 @@ public class BoardController {
         log.info("submit된 게시판 데이터 : {}", board);
 
         try {
-            boardService.newBoard(board);
-            response = ResponseEntity.ok().build();
-        } catch (IllegalStateException e) {
-            response = ResponseEntity.badRequest().body(e.getMessage());
-            e.printStackTrace();
-        } catch (Exception e) {
-            e.printStackTrace();
+                //if (!googleRecaptchaService.verifyRecaptcha(gRecaptchaResponse)) {
+                //    throw new IllegalStateException("자동가입방지 코드 오류!!");
+                //}
+                boardService.newBoard(board);
+                response = ResponseEntity.ok().build();
+        } catch (IllegalStateException ex) {
+            response = ResponseEntity.badRequest().body(ex.getMessage());
         }
-//        return ResponseEntity.ok().build();
+
         return response;
     }
 
-    @GetMapping("/list")
-    public ResponseEntity<?> list(@RequestParam(defaultValue = "1") int cpg) {
+    // list 엔드포인트 변경
+    // http://localhost:8080/api/board/list?cpg=4
+    // http://localhost:8080/api/board/list/4
+    @GetMapping("/list/{cpg}")
+    public ResponseEntity<?> list(@PathVariable int cpg) {
         BoardListDTO boardListDTO = boardService.readBoard(cpg);
 
         return new ResponseEntity<>(boardListDTO, HttpStatus.OK);
-
     }
+
+    @GetMapping("/find/{findtype}/{findkey}/{cpg}")
+    public ResponseEntity<?> find(@PathVariable int cpg,
+          @PathVariable String findtype, @PathVariable String findkey) {
+        BoardListDTO boardListDTO = boardService.findBoard(cpg, findtype, findkey);
+
+        return new ResponseEntity<>(boardListDTO, HttpStatus.OK);
+    }
+
+    @GetMapping("/test/{cpg}")
+    public ResponseEntity<?> test(@PathVariable int cpg) {
+        Page<BoardDTO> pageboards = boardService.testReadBoard(cpg);
+
+        return new ResponseEntity<>(pageboards, HttpStatus.OK);
+    }
+
 }
